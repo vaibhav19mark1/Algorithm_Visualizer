@@ -1,7 +1,7 @@
 // Importing the required components
 import React, { Component } from "react";
 import Node from "./Node/Node";
-import {dijkstra,getShortestPath} from '../algorithms/dijkstra';
+import { dijkstra, getShortestPath } from "../algorithms/dijkstra";
 
 // Importing CSS file
 import "./AlgoVisualizer.css";
@@ -20,26 +20,26 @@ export default class AlgoVisualizer extends Component {
   }
 
   componentDidMount() {
-    const grid=getInitialGrid();
-    this.setState({grid});
+    const grid = getInitialGrid();
+    this.setState({ grid });
   }
 
-  // visualizeDijkstra(){
-  //   const {grid}=this.state;
-  //   startNode=grid[START_NODE_ROW][START_NODE_COL];
-  //   finishNode=grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-  //   visitedNodesInOrder=dijkstra(grid,startNode,finishNode);
-  //   nodesInShortestPath=getShortestPath(finishNode);
-  // }
+  visualizeDijkstra() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+    const nodesInShortestPath = getShortestPath(finishNode);
+  }
 
   render() {
     const { grid } = this.state;
     console.log(grid);
     return (
       <>
-        {/* <button onClick={visualizeDijkstra()}>
+        <button onClick={() => this.visualizeDijkstra()}>
           Visualize Dijkstra's Algo
-        </button> */}
+        </button>
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
@@ -63,18 +63,20 @@ export default class AlgoVisualizer extends Component {
   }
 }
 
+// making the initial empty grid
 const getInitialGrid = () => {
   const grid = [];
   for (let row = 0; row < 20; row++) {
     const currentRow = [];
     for (let col = 0; col < 50; col++) {
-      currentRow.push(createNode(row,col));
+      currentRow.push(createNode(row, col));
     }
     grid.push(currentRow);
   }
   return grid;
 };
 
+// creates a new node
 const createNode = (row, col) => {
   return {
     row,
