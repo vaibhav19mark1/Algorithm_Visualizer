@@ -12,10 +12,11 @@ const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 45;
 
 export default class AlgoVisualizer extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       grid: [],
+      mouseIsPressed: false,
     };
   }
 
@@ -24,17 +25,61 @@ export default class AlgoVisualizer extends Component {
     this.setState({ grid });
   }
 
+  handleMouseDown(row, col) {
+    const newGrid = getWallToggledGrid(this.state.grid, row, col);
+    this.setState({ grid: newGrid, mouseIsPressed: true });
+  }
+
+  handleMouseEnter(row, col) {
+    if (!this.state.mouseIsPressed) return;
+    const newGrid = getWallToggledGrid(this.state.grid, row, col);
+    this.setState({ grid: newGrid, mouseIsPressed: true });
+  }
+
+  handleMouseUp() {
+    this.setState({ mouseIsPressed: false });
+  }
+
+  animateDijkstra(visitedNodesInOrder, nodesInShortestPath) {
+    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      if (i === visitedNodesInOrder.length) {
+        setTimeout(() => {
+          this.animateShortestPath(nodesInShortestPath);
+        }, 10 * i);
+        return;
+      }
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-visited";
+      }, 10 * i);
+    }
+  }
+
+  animateShortestPath(nodesInShortestPath) {
+    for (let i = 0; i < nodesInShortestPath.length; i++) {
+      setTimeout(() => {
+        const node = nodesInShortestPath[i];
+        console.log(document.getElementById(`node-${node.row}-${node.col}`))
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          "node node-shortest-path";
+      }, 50 * i);
+    }
+  }
+
   visualizeDijkstra() {
     const { grid } = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPath = getShortestPath(finishNode);
+    console.log(nodesInShortestPath)
+    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPath);
   }
 
   render() {
-    const { grid } = this.state;
-    console.log(grid);
+    const { grid, mouseIsPressed } = this.state;
+    // console.log(grid);
     return (
       <>
         <button onClick={() => this.visualizeDijkstra()}>
@@ -45,12 +90,23 @@ export default class AlgoVisualizer extends Component {
             return (
               <div key={rowIdx}>
                 {row.map((node, nodeIdx) => {
-                  const { isStart, isFinish } = node;
+                  const { row, col, isStart, isFinish, isWall } = node;
                   return (
                     <Node
                       key={nodeIdx}
-                      isStart={isStart}
+                      col={col}
                       isFinish={isFinish}
+                      isStart={isStart}
+                      isWall={isWall}
+                      mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => {
+                        this.handleMouseDown(row, col);
+                      }}
+                      onMouseEnter={(row, col) => {
+                        this.handleMouseEnter(row, col);
+                      }}
+                      onMouseUp={() => this.handleMouseUp()}
+                      row={row}
                     ></Node>
                   );
                 })}
@@ -88,4 +144,16 @@ const createNode = (row, col) => {
     isWall: false,
     previousNode: null,
   };
+};
+
+// Toggle Walls
+const getWallToggledGrid = (grid, row, col) => {
+  const newGrid = grid.slice();
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isWall: !node.isWall,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
 };
