@@ -5,6 +5,7 @@ import { dijkstra, getShortestPath } from "../algorithms/dijkstra";
 
 // Importing CSS file
 import "./AlgoVisualizer.css";
+import Navbar from "./Navbar/Navbar";
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 5;
@@ -60,7 +61,7 @@ export default class AlgoVisualizer extends Component {
     for (let i = 0; i < nodesInShortestPath.length; i++) {
       setTimeout(() => {
         const node = nodesInShortestPath[i];
-        console.log(document.getElementById(`node-${node.row}-${node.col}`))
+        console.log(document.getElementById(`node-${node.row}-${node.col}`));
         document.getElementById(`node-${node.row}-${node.col}`).className =
           "node node-shortest-path";
       }, 50 * i);
@@ -73,7 +74,7 @@ export default class AlgoVisualizer extends Component {
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPath = getShortestPath(finishNode);
-    console.log(nodesInShortestPath)
+    console.log(nodesInShortestPath);
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPath);
   }
 
@@ -82,9 +83,7 @@ export default class AlgoVisualizer extends Component {
     // console.log(grid);
     return (
       <>
-        <button onClick={() => this.visualizeDijkstra()}>
-          Visualize Dijkstra's Algo
-        </button>
+        <Navbar></Navbar>
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (

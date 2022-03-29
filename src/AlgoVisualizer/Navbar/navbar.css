@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+
+* {
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+li {
+  list-style: none;
+}
+
+.items li {
+  display: inline-block;
+}
+
+.name {
+  padding: 10px 5%;
+}
+
+/* Visualize Button Animation */
+
+.btn-visualize {
+  background: linear-gradient(-45deg, #3f00b5, #9f69fe, #27c8b7, #3f00b5);
+  background-size: 800% 400%;
+  padding: 1em 2em;
+  display: inline-block;
+  border: none;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  transition: all 0.5s ease-in-out;
+  animation: gradient 10s infinite cubic-bezier(0.62, 0.28, 0.23, 0.99) both;
+}
+
+button:hover {
+  animation: gradient 3s infinite;
+  transform: scale(1.05);
+}
+
+button:active {
+  animation: gradient 3s infinite;
+  transform: scale(0.8);
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Simple Buttons */
+.btn-simple {
+  background-color: #fff;
+  border-radius: 24px;
+  border-style: none;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 3px 5px -1px,
+    rgba(0, 0, 0, 0.14) 0 6px 10px 0, rgba(0, 0, 0, 0.12) 0 1px 18px 0;
+  box-sizing: border-box;
+  color: #3c4043;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  margin: 10px;
+  letter-spacing: 0.25px;
+  line-height: normal;
+  padding: 11px 24px;
+  transition: background box-shadow 280ms ease;
+}
+
+button:hover {
+  background: #f6f9fe;
+  color: #174ea6;
+}
+
+button:active {
+  box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%),
+    0 8px 12px 6px rgb(60 64 67 / 15%);
+  outline: none;
+  border: 2px solid #4285f4;
+}
